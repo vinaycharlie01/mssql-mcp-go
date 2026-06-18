@@ -1,0 +1,23 @@
+# Binaries
+/bin/
+/dist/
+/out/
+mcp-mssql-server
+
+# Local config and secrets
+config.yaml
+.env
+*.pfx
+
+# Test / coverage artifacts
+coverage.out
+*.test
+
+# Logs
+*.log
+
+# Editor / OS
+.DS_Store
+.idea/
+*.swp
+task.md
