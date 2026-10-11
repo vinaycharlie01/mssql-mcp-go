@@ -36,7 +36,7 @@ func (c *Connection) ExplainQuery(ctx context.Context, query string) (string, er
 		return "", fmt.Errorf("failed to enable showplan: %w", err)
 	}
 	// Best-effort restore of the session setting.
-	defer func() {
+	defer func() { //nolint:contextcheck // cleanup must run even when parent ctx is cancelled
 		restoreCtx, restoreCancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer restoreCancel()
 		_, _ = conn.ExecContext(restoreCtx, "SET SHOWPLAN_XML OFF")
