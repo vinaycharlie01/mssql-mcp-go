@@ -224,9 +224,9 @@ func (s *Service) FindCandidateKeys(ctx context.Context, table string) (map[stri
 		candidates = []string{}
 	}
 	return map[string]any{
-		"table":          table,
-		"rowCount":       total,
-		"candidateKeys":  candidates,
+		"table":         table,
+		"rowCount":      total,
+		"candidateKeys": candidates,
 	}, nil
 }
 

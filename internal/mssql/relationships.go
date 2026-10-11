@@ -54,9 +54,9 @@ ORDER BY fk.name`, sqlParam("@schema", schema), sqlParam("@table", object))
 	}
 
 	return map[string]any{
-		"schema":   schema,
-		"table":    object,
-		"references": outbound,
+		"schema":       schema,
+		"table":        object,
+		"references":   outbound,
 		"referencedBy": inbound,
 	}, nil
 }

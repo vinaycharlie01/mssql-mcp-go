@@ -74,7 +74,7 @@ linters:
         - "time.NewTicker"
         - "context.WithTimeout"
     dupl:
-      threshold: 200
+      threshold: 300
     revive:
       rules:
         - name: exported

@@ -37,15 +37,17 @@ func main() {
 		"database", config.Database.Database,
 	)
 
-	// Root context cancelled on shutdown.
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	// Establish the singleton connection pool.
-	conn, err := db.GetConnection(ctx, config, logger)
+	// Establish the singleton connection pool using a temporary context; the
+	// long-lived context is created afterwards so defers are not bypassed by
+	// a fatal exit here.
+	conn, err := db.GetConnection(context.Background(), config, logger)
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
+
+	// Root context cancelled on shutdown.
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	defer func() {
 		if cerr := conn.Close(); cerr != nil {
 			logger.Error("error closing database connection", "error", cerr)

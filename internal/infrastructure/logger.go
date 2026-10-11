@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+const logFilePerms = 0o600
+
 // NewLogger creates a new structured logger configured from the application
 // configuration.
 //
@@ -31,7 +33,7 @@ func NewLogger(config *Config) *slog.Logger {
 	// Additionally tee to a file when configured. The handle intentionally lives
 	// for the process lifetime and is reclaimed by the OS on exit.
 	if config.Logging.File != "" {
-		f, err := os.OpenFile(config.Logging.File, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
+		f, err := os.OpenFile(config.Logging.File, os.O_CREATE|os.O_WRONLY|os.O_APPEND, logFilePerms)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "logger: failed to open log file %q, continuing without it: %v\n", config.Logging.File, err)
 		} else {

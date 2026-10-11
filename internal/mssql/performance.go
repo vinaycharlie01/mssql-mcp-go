@@ -15,7 +15,7 @@ func (s *Service) ExplainQuery(ctx context.Context, query string) (map[string]an
 		return nil, err
 	}
 	return map[string]any{
-		"query":        query,
+		"query":         query,
 		"executionPlan": plan,
 	}, nil
 }
@@ -34,7 +34,7 @@ func (s *Service) EstimateQueryCost(ctx context.Context, query string) (map[stri
 		}
 	}
 	return map[string]any{
-		"query":              query,
+		"query":                query,
 		"estimatedSubtreeCost": maxCost,
 	}, nil
 }

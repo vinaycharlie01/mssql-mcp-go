@@ -93,19 +93,19 @@ func (s *Service) AnalyzeStoredProcedure(ctx context.Context, procedure string) 
 	}
 	schema, object := splitObjectName(procedure)
 	result := map[string]any{
-		"schema":            schema,
-		"procedure":         object,
-		"tablesUsed":        analysis["tablesUsed"],
-		"viewsUsed":         analysis["viewsUsed"],
-		"functionsUsed":     analysis["functionsUsed"],
-		"calledProcedures":  analysis["calledProcedures"],
-		"validationRules":   analysis["validationRules"],
-		"businessRules":     analysis["businessRules"],
-		"transactionUsage":  analysis["transactionUsage"],
-		"dynamicSql":        analysis["dynamicSql"],
-		"cursorUsage":       analysis["cursorUsage"],
-		"tempTables":        analysis["tempTables"],
-		"errorHandling":     analysis["errorHandling"],
+		"schema":           schema,
+		"procedure":        object,
+		"tablesUsed":       analysis["tablesUsed"],
+		"viewsUsed":        analysis["viewsUsed"],
+		"functionsUsed":    analysis["functionsUsed"],
+		"calledProcedures": analysis["calledProcedures"],
+		"validationRules":  analysis["validationRules"],
+		"businessRules":    analysis["businessRules"],
+		"transactionUsage": analysis["transactionUsage"],
+		"dynamicSql":       analysis["dynamicSql"],
+		"cursorUsage":      analysis["cursorUsage"],
+		"tempTables":       analysis["tempTables"],
+		"errorHandling":    analysis["errorHandling"],
 	}
 	return result, nil
 }
