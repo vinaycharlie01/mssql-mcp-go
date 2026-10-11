@@ -3,6 +3,7 @@
 /dist/
 /out/
 mcp-mssql-server
+/server
 
 # Local config and secrets
 config.yaml
