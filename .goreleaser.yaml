@@ -33,7 +33,7 @@ changelog:
   filters:
     exclude: ["^docs:", "^test:", "^ci:", "Merge pull request", "Merge branch"]
 
-homebrew:
+brews:
   - repository:
       owner: vinaycharlie01
       name: homebrew-tap
