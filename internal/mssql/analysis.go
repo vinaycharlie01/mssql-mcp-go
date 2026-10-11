@@ -18,22 +18,22 @@ var (
 	reBlockComment = regexp.MustCompile(`(?s)/\*.*?\*/`)
 	reStringLit    = regexp.MustCompile(`'(?:[^']|'')*'`)
 
-	reBeginTran   = regexp.MustCompile(`(?i)\bBEGIN\s+TRAN(SACTION)?\b`)
-	reCommit      = regexp.MustCompile(`(?i)\bCOMMIT\b`)
-	reRollback    = regexp.MustCompile(`(?i)\bROLLBACK\b`)
-	reSaveTran    = regexp.MustCompile(`(?i)\bSAVE\s+TRAN(SACTION)?\b`)
-	reTryCatch    = regexp.MustCompile(`(?i)\bBEGIN\s+TRY\b`)
-	reRaiserror   = regexp.MustCompile(`(?i)\bRAISERROR\b`)
-	reThrow       = regexp.MustCompile(`(?i)\bTHROW\b`)
-	reErrorFns    = regexp.MustCompile(`(?i)\bERROR_(MESSAGE|NUMBER|SEVERITY|STATE|LINE|PROCEDURE)\s*\(`)
-	reCursor      = regexp.MustCompile(`(?i)\bDECLARE\s+([A-Za-z_][A-Za-z0-9_@#$]*)\s+(INSENSITIVE\s+|SCROLL\s+)*CURSOR\b`)
-	reTempTable   = regexp.MustCompile(`#{1,2}[A-Za-z_][A-Za-z0-9_]*`)
-	reDynExec     = regexp.MustCompile(`(?i)\b(EXEC(UTE)?\s*\(|SP_EXECUTESQL)\b`)
-	reIdentifier  = regexp.MustCompile(`[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*){0,2}`)
-	reFromJoin    = regexp.MustCompile(`(?i)\b(?:FROM|JOIN|APPLY|INTO|UPDATE|MERGE)\s+([A-Za-z_\[][A-Za-z0-9_\].]*)`)
-	reExecProc    = regexp.MustCompile(`(?i)\b(?:EXEC|EXECUTE)\s+([A-Za-z_\[][A-Za-z0-9_\].]*)`)
-	reValidation  = regexp.MustCompile(`(?i)\bIF\b[^\n]*?\b(RAISERROR|THROW|RETURN)\b[^\n]*`)
-	reBizComment  = regexp.MustCompile(`(?i)--\s*(business rule|rule:|note:|important|policy)[^\n]*`)
+	reBeginTran  = regexp.MustCompile(`(?i)\bBEGIN\s+TRAN(SACTION)?\b`)
+	reCommit     = regexp.MustCompile(`(?i)\bCOMMIT\b`)
+	reRollback   = regexp.MustCompile(`(?i)\bROLLBACK\b`)
+	reSaveTran   = regexp.MustCompile(`(?i)\bSAVE\s+TRAN(SACTION)?\b`)
+	reTryCatch   = regexp.MustCompile(`(?i)\bBEGIN\s+TRY\b`)
+	reRaiserror  = regexp.MustCompile(`(?i)\bRAISERROR\b`)
+	reThrow      = regexp.MustCompile(`(?i)\bTHROW\b`)
+	reErrorFns   = regexp.MustCompile(`(?i)\bERROR_(MESSAGE|NUMBER|SEVERITY|STATE|LINE|PROCEDURE)\s*\(`)
+	reCursor     = regexp.MustCompile(`(?i)\bDECLARE\s+([A-Za-z_][A-Za-z0-9_@#$]*)\s+(INSENSITIVE\s+|SCROLL\s+)*CURSOR\b`)
+	reTempTable  = regexp.MustCompile(`#{1,2}[A-Za-z_][A-Za-z0-9_]*`)
+	reDynExec    = regexp.MustCompile(`(?i)\b(EXEC(UTE)?\s*\(|SP_EXECUTESQL)\b`)
+	reIdentifier = regexp.MustCompile(`[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*){0,2}`)
+	reFromJoin   = regexp.MustCompile(`(?i)\b(?:FROM|JOIN|APPLY|INTO|UPDATE|MERGE)\s+([A-Za-z_\[][A-Za-z0-9_\].]*)`)
+	reExecProc   = regexp.MustCompile(`(?i)\b(?:EXEC|EXECUTE)\s+([A-Za-z_\[][A-Za-z0-9_\].]*)`)
+	reValidation = regexp.MustCompile(`(?i)\bIF\b[^\n]*?\b(RAISERROR|THROW|RETURN)\b[^\n]*`)
+	reBizComment = regexp.MustCompile(`(?i)--\s*(business rule|rule:|note:|important|policy)[^\n]*`)
 )
 
 // cleanDefinition removes comments and string literals from a module
@@ -182,17 +182,17 @@ func (s *Service) analyzeDefinition(ctx context.Context, def string) (map[string
 	}
 
 	return map[string]any{
-		"tablesUsed":        uniqueSorted(tablesUsed),
-		"viewsUsed":         uniqueSorted(viewsUsed),
-		"functionsUsed":     uniqueSorted(functionsUsed),
-		"calledProcedures":  uniqueSorted(calledProcs),
-		"validationRules":   extractValidationRules(clean),
-		"businessRules":     extractBusinessRules(def),
-		"transactionUsage":  extractTransactionUsage(clean),
-		"dynamicSql":        extractDynamicSQL(clean),
-		"cursorUsage":       extractCursors(clean),
-		"tempTables":        extractTempTables(clean),
-		"errorHandling":     extractErrorHandling(clean),
+		"tablesUsed":       uniqueSorted(tablesUsed),
+		"viewsUsed":        uniqueSorted(viewsUsed),
+		"functionsUsed":    uniqueSorted(functionsUsed),
+		"calledProcedures": uniqueSorted(calledProcs),
+		"validationRules":  extractValidationRules(clean),
+		"businessRules":    extractBusinessRules(def),
+		"transactionUsage": extractTransactionUsage(clean),
+		"dynamicSql":       extractDynamicSQL(clean),
+		"cursorUsage":      extractCursors(clean),
+		"tempTables":       extractTempTables(clean),
+		"errorHandling":    extractErrorHandling(clean),
 	}, nil
 }
 

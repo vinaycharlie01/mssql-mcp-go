@@ -232,7 +232,7 @@ func (s *Service) FindCandidateKeys(ctx context.Context, table string) (map[stri
 
 // qualifiedTable validates and returns the bracket-quoted schema.table form.
 func (s *Service) qualifiedTable(table string) (string, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	return quoteQualified(schema, object)
 }
 

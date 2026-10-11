@@ -30,8 +30,8 @@ ORDER BY df.type_desc, df.name`)
 	}
 
 	return map[string]any{
-		"database":   s.database,
-		"files":      files,
+		"database":    s.database,
+		"files":       files,
 		"totalSizeKb": total,
 	}, nil
 }

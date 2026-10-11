@@ -26,7 +26,7 @@ ORDER BY sch.name, t.name, tr.name`
 
 // GetTriggerDefinition returns the T-SQL body of a trigger.
 func (s *Service) GetTriggerDefinition(ctx context.Context, trigger string) (map[string]any, error) {
-	schema, object := splitObjectName(trigger, "dbo")
+	schema, object := splitObjectName(trigger)
 	const sql = `
 SELECT m.definition AS definition
 FROM sys.sql_modules m
@@ -48,7 +48,7 @@ WHERE tr.name = @trigger`
 
 // AnalyzeTrigger performs static analysis of a trigger definition.
 func (s *Service) AnalyzeTrigger(ctx context.Context, trigger string) (map[string]any, error) {
-	schema, object := splitObjectName(trigger, "dbo")
+	schema, object := splitObjectName(trigger)
 	res, err := s.GetTriggerDefinition(ctx, trigger)
 	if err != nil {
 		return nil, err

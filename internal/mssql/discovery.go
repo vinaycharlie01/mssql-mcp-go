@@ -61,7 +61,7 @@ ORDER BY sch.name, t.name`
 // DescribeTable returns the columns, primary keys, foreign keys and indexes for
 // a single table.
 func (s *Service) DescribeTable(ctx context.Context, table string) (map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 
 	columns, err := s.ListColumns(ctx, table)
 	if err != nil {
@@ -140,7 +140,7 @@ ORDER BY i.is_primary_key DESC, i.name`, sqlParam("@schema", schema), sqlParam("
 
 // ListColumns returns the columns of a table or view.
 func (s *Service) ListColumns(ctx context.Context, table string) ([]map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	const sql = `
 SELECT
     c.column_id                               AS ordinal,
@@ -166,7 +166,7 @@ ORDER BY c.column_id`
 
 // DescribeColumn returns detailed metadata for a single column.
 func (s *Service) DescribeColumn(ctx context.Context, table, column string) (map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	const sql = `
 SELECT
     s.name                                    AS schema_name,
@@ -203,7 +203,7 @@ WHERE s.name = @schema AND o.name = @table AND c.name = @column`
 // TableRowCount returns an accurate row count for a table using catalog
 // metadata (no scan of the base data).
 func (s *Service) TableRowCount(ctx context.Context, table string) (map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	const sql = `
 SELECT
     s.name              AS schema_name,
@@ -227,7 +227,7 @@ GROUP BY s.name, t.name`
 // TableStorageInfo returns storage statistics (space used, index space) for a
 // table.
 func (s *Service) TableStorageInfo(ctx context.Context, table string) (map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	const sql = `
 SELECT
     s.name                                          AS schema_name,

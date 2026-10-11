@@ -188,7 +188,7 @@ func getConfigPath() string {
 
 // loadFromYAML loads configuration from a YAML file.
 func loadFromYAML(path string) (*Config, error) {
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(path) //nolint:gosec // config path is from a trusted source (CLI flag or env var)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read config file: %w", err)
 	}

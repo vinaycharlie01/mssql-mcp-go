@@ -73,6 +73,8 @@ linters:
         - "v.SetDefault"
         - "time.NewTicker"
         - "context.WithTimeout"
+    dupl:
+      threshold: 200
     revive:
       rules:
         - name: exported

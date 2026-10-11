@@ -44,8 +44,7 @@ func main() {
 	// Establish the singleton connection pool.
 	conn, err := db.GetConnection(ctx, config, logger)
 	if err != nil {
-		logger.Error("failed to connect to database", "error", err)
-		os.Exit(1)
+		log.Fatalf("failed to connect to database: %v", err)
 	}
 	defer func() {
 		if cerr := conn.Close(); cerr != nil {

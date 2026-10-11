@@ -98,7 +98,7 @@ ORDER BY r.name, m.name`
 
 // ObjectPermissions returns permission grants on a specific object.
 func (s *Service) ObjectPermissions(ctx context.Context, object string) ([]map[string]any, error) {
-	schema, name := splitObjectName(object, "dbo")
+	schema, name := splitObjectName(object)
 	const sql = `
 SELECT
     dp.name                 AS principal_name,

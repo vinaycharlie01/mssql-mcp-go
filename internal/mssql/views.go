@@ -24,7 +24,7 @@ ORDER BY sch.name, v.name`
 // objectDefinition returns the T-SQL definition text for a module
 // (view/procedure/function/trigger) identified by name.
 func (s *Service) objectDefinition(ctx context.Context, name string) (string, error) {
-	schema, object := splitObjectName(name, "dbo")
+	schema, object := splitObjectName(name)
 	const sql = `
 SELECT m.definition AS definition
 FROM sys.sql_modules m
@@ -44,7 +44,7 @@ WHERE s.name = @schema AND o.name = @object`
 
 // GetViewDefinition returns the SQL definition of a view.
 func (s *Service) GetViewDefinition(ctx context.Context, view string) (map[string]any, error) {
-	schema, object := splitObjectName(view, "dbo")
+	schema, object := splitObjectName(view)
 	def, err := s.objectDefinition(ctx, view)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (s *Service) GetViewDefinition(ctx context.Context, view string) (map[strin
 // AnalyzeView performs static analysis of a view definition: source
 // tables/views, columns exposed and dependencies.
 func (s *Service) AnalyzeView(ctx context.Context, view string) (map[string]any, error) {
-	schema, object := splitObjectName(view, "dbo")
+	schema, object := splitObjectName(view)
 	def, err := s.objectDefinition(ctx, view)
 	if err != nil {
 		return nil, err
@@ -123,7 +123,7 @@ func (s *Service) TraceViewSources(ctx context.Context, view string) (map[string
 		return nil, err
 	}
 
-	schema, object := splitObjectName(view, "dbo")
+	schema, object := splitObjectName(view)
 	return map[string]any{
 		"schema":     schema,
 		"view":       object,
@@ -134,7 +134,7 @@ func (s *Service) TraceViewSources(ctx context.Context, view string) (map[string
 // ExtractViewDependencies lists all objects the view depends on, using the
 // engine's own dependency catalog (sys.sql_expression_dependencies).
 func (s *Service) ExtractViewDependencies(ctx context.Context, view string) (map[string]any, error) {
-	schema, object := splitObjectName(view, "dbo")
+	schema, object := splitObjectName(view)
 	deps, err := s.objectDependencies(ctx, schema, object)
 	if err != nil {
 		return nil, err

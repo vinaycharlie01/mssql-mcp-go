@@ -67,9 +67,10 @@ func quoteName(ident string) (string, error) {
 }
 
 // splitObjectName splits a possibly schema-qualified object name ("schema.obj"
-// or "obj") into its schema and object parts. When no schema is supplied the
-// provided default is used.
-func splitObjectName(name, defaultSchema string) (schema, object string) {
+// or "obj") into its schema and object parts. When no schema is supplied "dbo"
+// is used as the default.
+func splitObjectName(name string) (schema, object string) {
+	const defaultSchema = "dbo"
 	name = strings.TrimSpace(name)
 	if idx := strings.LastIndex(name, "."); idx >= 0 {
 		schema = strings.Trim(name[:idx], "[] ")
