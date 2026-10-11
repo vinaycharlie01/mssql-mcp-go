@@ -224,15 +224,15 @@ func (s *Service) FindCandidateKeys(ctx context.Context, table string) (map[stri
 		candidates = []string{}
 	}
 	return map[string]any{
-		"table":          table,
-		"rowCount":       total,
-		"candidateKeys":  candidates,
+		"table":         table,
+		"rowCount":      total,
+		"candidateKeys": candidates,
 	}, nil
 }
 
 // qualifiedTable validates and returns the bracket-quoted schema.table form.
 func (s *Service) qualifiedTable(table string) (string, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	return quoteQualified(schema, object)
 }
 

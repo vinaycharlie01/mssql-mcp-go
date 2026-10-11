@@ -26,7 +26,7 @@ ORDER BY sch.name, o.name`
 // GetFunctionDefinition returns the T-SQL body of a function with its
 // parameters.
 func (s *Service) GetFunctionDefinition(ctx context.Context, function string) (map[string]any, error) {
-	schema, object := splitObjectName(function, "dbo")
+	schema, object := splitObjectName(function)
 	def, err := s.objectDefinition(ctx, function)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (s *Service) AnalyzeFunction(ctx context.Context, function string) (map[str
 	if err != nil {
 		return nil, err
 	}
-	schema, object := splitObjectName(function, "dbo")
+	schema, object := splitObjectName(function)
 	return map[string]any{
 		"schema":           schema,
 		"function":         object,
@@ -67,21 +67,21 @@ func (s *Service) AnalyzeFunction(ctx context.Context, function string) (map[str
 
 // TraceFunctionUsage finds every object that references the given function.
 func (s *Service) TraceFunctionUsage(ctx context.Context, function string) (map[string]any, error) {
-	schema, object := splitObjectName(function, "dbo")
+	schema, object := splitObjectName(function)
 	refs, err := s.objectReferencers(ctx, object)
 	if err != nil {
 		return nil, err
 	}
 	return map[string]any{
-		"schema":      schema,
-		"function":    object,
+		"schema":       schema,
+		"function":     object,
 		"referencedBy": refs,
 	}, nil
 }
 
 // ExtractFunctionDependencies lists the objects the function depends on.
 func (s *Service) ExtractFunctionDependencies(ctx context.Context, function string) (map[string]any, error) {
-	schema, object := splitObjectName(function, "dbo")
+	schema, object := splitObjectName(function)
 	deps, err := s.objectDependencies(ctx, schema, object)
 	if err != nil {
 		return nil, err

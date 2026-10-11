@@ -24,7 +24,7 @@ ORDER BY sch.name, p.name`
 // GetProcedureDefinition returns the T-SQL body of a stored procedure together
 // with its parameters.
 func (s *Service) GetProcedureDefinition(ctx context.Context, procedure string) (map[string]any, error) {
-	schema, object := splitObjectName(procedure, "dbo")
+	schema, object := splitObjectName(procedure)
 	def, err := s.objectDefinition(ctx, procedure)
 	if err != nil {
 		return nil, err
@@ -91,21 +91,21 @@ func (s *Service) AnalyzeStoredProcedure(ctx context.Context, procedure string) 
 	if err != nil {
 		return nil, err
 	}
-	schema, object := splitObjectName(procedure, "dbo")
+	schema, object := splitObjectName(procedure)
 	result := map[string]any{
-		"schema":            schema,
-		"procedure":         object,
-		"tablesUsed":        analysis["tablesUsed"],
-		"viewsUsed":         analysis["viewsUsed"],
-		"functionsUsed":     analysis["functionsUsed"],
-		"calledProcedures":  analysis["calledProcedures"],
-		"validationRules":   analysis["validationRules"],
-		"businessRules":     analysis["businessRules"],
-		"transactionUsage":  analysis["transactionUsage"],
-		"dynamicSql":        analysis["dynamicSql"],
-		"cursorUsage":       analysis["cursorUsage"],
-		"tempTables":        analysis["tempTables"],
-		"errorHandling":     analysis["errorHandling"],
+		"schema":           schema,
+		"procedure":        object,
+		"tablesUsed":       analysis["tablesUsed"],
+		"viewsUsed":        analysis["viewsUsed"],
+		"functionsUsed":    analysis["functionsUsed"],
+		"calledProcedures": analysis["calledProcedures"],
+		"validationRules":  analysis["validationRules"],
+		"businessRules":    analysis["businessRules"],
+		"transactionUsage": analysis["transactionUsage"],
+		"dynamicSql":       analysis["dynamicSql"],
+		"cursorUsage":      analysis["cursorUsage"],
+		"tempTables":       analysis["tempTables"],
+		"errorHandling":    analysis["errorHandling"],
 	}
 	return result, nil
 }
@@ -121,7 +121,7 @@ func (s *Service) extractAspect(ctx context.Context, procedure, analysisKey, out
 	if err != nil {
 		return nil, err
 	}
-	schema, object := splitObjectName(procedure, "dbo")
+	schema, object := splitObjectName(procedure)
 	return map[string]any{
 		"schema":    schema,
 		"procedure": object,

@@ -9,7 +9,7 @@ import (
 // TableRelationships returns the inbound and outbound foreign key relationships
 // for a single table.
 func (s *Service) TableRelationships(ctx context.Context, table string) (map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 
 	outbound, err := s.rows(ctx, `
 SELECT
@@ -54,9 +54,9 @@ ORDER BY fk.name`, sqlParam("@schema", schema), sqlParam("@table", object))
 	}
 
 	return map[string]any{
-		"schema":   schema,
-		"table":    object,
-		"references": outbound,
+		"schema":       schema,
+		"table":        object,
+		"references":   outbound,
 		"referencedBy": inbound,
 	}, nil
 }
@@ -116,7 +116,7 @@ func (s *Service) GenerateERD(ctx context.Context, table string, depth int) (map
 	if depth <= 0 {
 		depth = 2
 	}
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	root := schema + "." + object
 
 	edges, err := s.allForeignKeyEdges(ctx)
@@ -173,7 +173,7 @@ func (s *Service) GenerateERD(ctx context.Context, table string, depth int) (map
 // DependencyGraph builds a recursive dependency graph for a database object
 // using sys.sql_expression_dependencies.
 func (s *Service) DependencyGraph(ctx context.Context, object string) (map[string]any, error) {
-	schema, name := splitObjectName(object, "dbo")
+	schema, name := splitObjectName(object)
 	visited := map[string]bool{}
 	var edges []map[string]any
 
@@ -221,7 +221,7 @@ func (s *Service) DependencyGraph(ctx context.Context, object string) (map[strin
 
 // FindObjectDependencies returns the objects the given object depends on.
 func (s *Service) FindObjectDependencies(ctx context.Context, object string) (map[string]any, error) {
-	schema, name := splitObjectName(object, "dbo")
+	schema, name := splitObjectName(object)
 	deps, err := s.objectDependencies(ctx, schema, name)
 	if err != nil {
 		return nil, err
@@ -234,7 +234,7 @@ func (s *Service) FindObjectDependencies(ctx context.Context, object string) (ma
 
 // FindObjectReferences returns the objects that reference the given object.
 func (s *Service) FindObjectReferences(ctx context.Context, object string) (map[string]any, error) {
-	_, name := splitObjectName(object, "dbo")
+	_, name := splitObjectName(object)
 	refs, err := s.objectReferencers(ctx, name)
 	if err != nil {
 		return nil, err
@@ -263,7 +263,7 @@ ORDER BY o.type_desc, s.name, o.name`
 // FindTableUsage returns every procedure, view, function and trigger that
 // references the table.
 func (s *Service) FindTableUsage(ctx context.Context, table string) (map[string]any, error) {
-	_, object := splitObjectName(table, "dbo")
+	_, object := splitObjectName(table)
 	refs, err := s.objectReferencers(ctx, object)
 	if err != nil {
 		return nil, err
@@ -299,7 +299,7 @@ func (s *Service) FindTableUsage(ctx context.Context, table string) (map[string]
 
 // FindColumnUsage returns the modules that reference a specific column.
 func (s *Service) FindColumnUsage(ctx context.Context, table, column string) (map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	const sql = `
 SELECT DISTINCT
     s.name          AS schema_name,
@@ -351,7 +351,7 @@ ORDER BY s.name, t.name`
 // This is heuristic: dynamic SQL and application code are not visible to the
 // engine's dependency tracking.
 func (s *Service) FindUnusedColumns(ctx context.Context, table string) ([]map[string]any, error) {
-	schema, object := splitObjectName(table, "dbo")
+	schema, object := splitObjectName(table)
 	const sql = `
 SELECT
     c.name AS column_name,
@@ -395,10 +395,9 @@ func (s *Service) FindCircularDependencies(ctx context.Context) (map[string]any,
 	}
 	adj := map[string][]string{}
 	for _, e := range edges {
-		if e.From == e.To {
-			// self reference is a trivial cycle handled separately below
+		if e.From != e.To {
+			adj[e.From] = append(adj[e.From], e.To)
 		}
-		adj[e.From] = append(adj[e.From], e.To)
 	}
 
 	cycles := [][]string{}
@@ -410,13 +409,13 @@ func (s *Service) FindCircularDependencies(ctx context.Context) (map[string]any,
 		color[node] = 1
 		stack = append(stack, node)
 		for _, nb := range adj[node] {
-			if color[nb] == 1 {
-				// found a back edge; capture the cycle from nb in the stack
+			switch color[nb] {
+			case 1:
 				cycle := captureCycle(stack, nb)
 				if len(cycle) > 0 {
 					cycles = append(cycles, cycle)
 				}
-			} else if color[nb] == 0 {
+			case 0:
 				dfs(nb)
 			}
 		}
