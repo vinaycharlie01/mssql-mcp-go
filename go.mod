@@ -3,10 +3,8 @@ module vinaycharlie01/mssql-mcp-go/mcp-mssql-go
 go 1.25.7
 
 require (
-	github.com/magefile/mage v1.17.2
 	github.com/microsoft/go-mssqldb v1.10.0
 	github.com/modelcontextprotocol/go-sdk v1.6.1
-	github.com/nirantaraai/nava v0.0.0-20260804161138-829b62dafd5a
 	gopkg.in/yaml.v3 v3.0.1
 )
 
