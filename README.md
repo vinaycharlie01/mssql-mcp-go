@@ -60,13 +60,13 @@ docker run --rm \
 
 ### Build from source
 
-Requires Go 1.25+ and [mage](https://magefile.org).
+Requires Go 1.25+ and [Task](https://taskfile.dev).
 
 ```bash
 git clone https://github.com/vinaycharlie01/mssql-mcp-go.git
 cd mssql-mcp-go
-go install github.com/magefile/mage@v1.17.2
-mage build
+go install github.com/go-task/task/v3/cmd/task@latest
+task build
 # binary is at dist/mssql-mcp-go
 ```
 
@@ -420,13 +420,13 @@ The server starts via stdio, registers all tools with the MCP SDK, and forwards 
 ## Development
 
 ```bash
-mage build          # compile the binary
-mage test           # run unit tests
-mage race           # run tests with race detector
-mage coverage       # generate coverage report
-mage bench          # run benchmarks
-mage lint           # run golangci-lint
-mage release        # build release with goreleaser
+task build          # compile the binary
+task test           # run unit tests
+task race           # run tests with race detector
+task coverage       # generate coverage report
+task bench          # run benchmarks
+task lint           # run golangci-lint
+task release        # build release with goreleaser
 ```
 
 ## License
